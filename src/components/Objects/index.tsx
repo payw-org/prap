@@ -1,5 +1,5 @@
 import React from 'react'
-import 'components/Objects.scss'
+import './Objects.scss'
 
 export default () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import 'components/Options.scss'
+import './Options.scss'
 
 export default () => {
   return (

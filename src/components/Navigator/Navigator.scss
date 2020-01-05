@@ -1,4 +1,4 @@
-@use '../variables' as *;
+@use '../../variables' as *;
 
 #navigator {
   background-color: #fff;
@@ -26,7 +26,13 @@
     }
 
     &:hover {
-      box-shadow: 0 0 0 3px gray;
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 3px #c4c4c4;
+    }
+
+    &.current {
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 3px #ffc038;
     }
   }
 }
