@@ -12,10 +12,6 @@ export default () => {
   const [slides] = useState(sampleSlides)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
-  useEffect(() => {
-    console.log('currentSlideIndex:' + currentSlideIndex)
-  })
-
   return (
     <div id="workspace">
       <Objects />
@@ -24,7 +20,7 @@ export default () => {
         currentSlideIndex={currentSlideIndex}
         setCurrentSlideIndex={setCurrentSlideIndex}
       />
-      <Canvas selectedSlide={currentSlideIndex} />
+      <Canvas currentSlide={slides[currentSlideIndex]} />
       <Tools />
     </div>
   )
