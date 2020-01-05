@@ -1,21 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import Text from './Text'
 import './Canvas.scss'
 
 type CanvasProps = {
-  selectedSlide: Object
+  currentSlide: any
 }
 
-const Canvas: React.FC<CanvasProps> = ({ selectedSlide }) => {
-  function makeObjectItem(obj: any) {
-    if (obj.type === 'text') {
-      console.log(obj.type)
+const Canvas: React.FC<CanvasProps> = ({ currentSlide }) => {
+  const elems = currentSlide.objects.map((item: any, index: number) => {
+    if (item.type === 'text') {
+      return <div className="text">{item.data}</div>
+    } else {
+      return
     }
-  }
+  })
 
   return (
     <div id="canvas-container">
       <div id="canvas-wrapper">
-        <div id="canvas"></div>
+        <div id="canvas">{elems}</div>
       </div>
     </div>
   )
