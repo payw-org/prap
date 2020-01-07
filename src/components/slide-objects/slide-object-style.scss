@@ -1,0 +1,10 @@
+.slide-object {
+  &.selected {
+    box-shadow: 0 0 0 1px #1990ff;
+  }
+
+  &.editable {
+    user-select: all;
+    cursor: text;
+  }
+}
