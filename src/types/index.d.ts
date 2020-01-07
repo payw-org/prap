@@ -1,5 +1,5 @@
 export type SlideObject = {
-  type: string
+  type: 'text' | 'image' | 'shape'
   pos: {
     x: number
     y: number
@@ -10,17 +10,18 @@ export type SlideTextObject = SlideObject & {
   content: string
   align: string
   family: string
-  size: string
-  weight: string
+  size: number
+  weight: number
   color: string
+  lineHeight: number
 }
 
 export type Slide = {
-  objects: SlideTextObject[]
+  objects: (SlideObject | SlideTextObject)[]
 }
 
 export type Slides = Slide[]
 
-export type File = {
+export type BlackoutFile = {
   slides: Slides
 }
