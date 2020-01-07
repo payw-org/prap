@@ -1,6 +1,6 @@
-import { File, SlideTextObject } from 'types'
+import { BlackoutFile, SlideTextObject } from 'types'
 
-const file: File = {
+const file: BlackoutFile = {
   slides: [
     {
       objects: [
@@ -11,6 +11,21 @@ const file: File = {
           pos: {
             x: 50,
             y: 50
+          },
+          size: 30,
+          lineHeight: 1
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
           }
         } as SlideTextObject
       ]
@@ -19,11 +34,115 @@ const file: File = {
       objects: [
         {
           type: 'text',
-          content: 'Hello World',
-          align: 'center',
+          content: 'Bye World',
+          align: 'left',
           pos: {
-            x: 50,
-            y: 50
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
+          }
+        } as SlideTextObject
+      ]
+    },
+    {
+      objects: [
+        {
+          type: 'text',
+          content: 'Bye World',
+          align: 'left',
+          pos: {
+            x: 0,
+            y: 0
           }
         } as SlideTextObject
       ]
