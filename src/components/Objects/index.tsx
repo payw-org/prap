@@ -1,12 +1,27 @@
 import React from 'react'
 import './Objects.scss'
 
-export default () => {
+type ObjectsProps = {
+  addObject: Function
+}
+
+const Objects: React.FC<ObjectsProps> = ({ addObject }) => {
+  function handleObjectClick(type: string) {
+    addObject('text')
+    console.log(type)
+  }
+
   return (
     <div id="objects">
       <ul className="list">
         <li className="obj">
-          <button>Text</button>
+          <button
+            onClick={() => {
+              handleObjectClick('text')
+            }}
+          >
+            Text
+          </button>
         </li>
         <li className="obj">
           <button>Image</button>
@@ -18,3 +33,5 @@ export default () => {
     </div>
   )
 }
+
+export default Objects

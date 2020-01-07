@@ -1,27 +1,42 @@
-import React, { useState, useEffect } from 'react'
-import Navigator from '../Navigator'
-import Canvas from '../Canvas'
-import Tools from '../Options'
-import Objects from '../Objects'
-import './Workspace.scss'
+import React, { useState } from 'react'
+import Navigator from 'components/Navigator'
+import Canvas from 'components/Canvas'
+import Options from 'components/Options'
+import Objects from 'components/Objects'
+import { Slides, SlideTextObject } from 'types'
+import './style.scss'
 
-import sampleData from '../../data/slides-sample'
-const sampleSlides = sampleData.slides
+import sampleFile from '../../data/slides-sample'
+const sampleSlides: Slides = sampleFile.slides
 
 export default () => {
-  const [slides] = useState(sampleSlides)
+  const [slides, setSlides] = useState(sampleSlides)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+
+  function addObject(object: any) {
+    let updatedSlides = [...slides]
+    updatedSlides[currentSlideIndex].objects.push({
+      type: 'text',
+      content: 'Hello World',
+      align: 'center',
+      pos: {
+        x: 50,
+        y: 50
+      }
+    } as SlideTextObject)
+    setSlides(updatedSlides)
+  }
 
   return (
     <div id="workspace">
-      <Objects />
+      <Objects addObject={addObject} />
       <Navigator
         slides={slides}
         currentSlideIndex={currentSlideIndex}
         setCurrentSlideIndex={setCurrentSlideIndex}
       />
       <Canvas currentSlide={slides[currentSlideIndex]} />
-      <Tools />
+      <Options />
     </div>
   )
 }

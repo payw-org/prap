@@ -1,5 +1,5 @@
 import React from 'react'
-import './Navigator.scss'
+import './style.scss'
 
 type NavigatorProps = {
   slides: Array<any>
