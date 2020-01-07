@@ -1,30 +1,34 @@
-export default {
+import { File, SlideTextObject } from 'types'
+
+const file: File = {
   slides: [
     {
       objects: [
         {
           type: 'text',
-          data: 'Hello World',
+          content: 'Hello World',
           align: 'center',
           pos: {
-            x: '50%',
-            y: '50%'
+            x: 50,
+            y: 50
           }
-        }
+        } as SlideTextObject
       ]
     },
     {
       objects: [
         {
           type: 'text',
-          data: 'Hello World',
+          content: 'Hello World',
           align: 'center',
           pos: {
-            x: '50%',
-            y: '50%'
+            x: 50,
+            y: 50
           }
-        }
+        } as SlideTextObject
       ]
     }
   ]
 }
+
+export default file

@@ -16,7 +16,7 @@ export type SlideTextObject = SlideObject & {
 }
 
 export type Slide = {
-  objects: (SlideObject | SlideTextObject)[]
+  objects: SlideTextObject[]
 }
 
 export type Slides = Slide[]
