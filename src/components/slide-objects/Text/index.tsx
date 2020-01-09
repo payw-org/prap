@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { SlideTextObject } from 'types'
 import 'components/slide-objects/slide-object-style.scss'
 import './style.scss'
@@ -8,6 +8,9 @@ type TextProps = {
 }
 
 const Text: React.FC<TextProps> = ({ data }) => {
+  const [isSelected, setIsSelected] = useState(false)
+  const [isEditable, setIsEditable] = useState(false)
+
   return (
     <div
       className="slide-object text"
