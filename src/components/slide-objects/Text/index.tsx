@@ -12,7 +12,19 @@ const Text: React.FC<TextProps> = ({ data }) => {
   const [isEditable, setIsEditable] = useState(false)
 
   return (
-    <div
+    // <div
+    //   className="slide-object text"
+    //   style={
+    //     {
+    //       top: data.pos.y + '%',
+    //       left: data.pos.x + '%'
+    //     } as React.CSSProperties
+    //   }
+    // >
+    //   {data.content}
+    // </div>
+    <input
+      disabled
       className="slide-object text"
       style={
         {
@@ -20,9 +32,7 @@ const Text: React.FC<TextProps> = ({ data }) => {
           left: data.pos.x + '%'
         } as React.CSSProperties
       }
-    >
-      {data.content}
-    </div>
+    />
   )
 }
 
