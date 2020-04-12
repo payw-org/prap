@@ -1,0 +1,7 @@
+type Query {
+  Test: [Test!]!
+}
+type Test {
+  id: Int!
+  name: String!
+}
