@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "target": "ES2018",
+    "allowJs": true,
+    "module": "CommonJS",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }],
+    "lib": ["ES2020.String", "DOM"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
+}
