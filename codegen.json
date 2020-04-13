@@ -1,0 +1,12 @@
+{
+  "overwrite": true,
+  "schema": ["src/graphql/**/*.graphql"],
+  "generates": {
+    "./src/graphql/types.d.ts": {
+      "plugins": ["typescript"]
+    }
+  },
+  "hooks": {
+    "afterAllFileWrite": ["prettier --write", "eslint --fix"]
+  }
+}

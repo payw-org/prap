@@ -15,7 +15,6 @@
     "plugins": [{ "transform": "@zerollup/ts-transform-paths" }],
     "lib": ["ES2020.String", "DOM"]
   },
-  "files": ["src/graphql/graphql.d.ts"],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "build"]
 }

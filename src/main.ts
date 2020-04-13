@@ -1,15 +1,23 @@
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
-import schema from '@/graphql'
+import schema from 'src/graphql'
+import Config from 'src/config'
+
+if (process.env.NODE_ENV === 'development') {
+  console.log('development mode')
+  process.env.NODE_ENV = 'development'
+}
+
 const app = express()
 app.use(
   '/graphql',
   graphqlHTTP(async (request) => {
     return {
       schema: schema,
-      graphiql: true, // GraphQL 쿼리를 테스트할 수 있는 Dev Tool입니다.
+      graphiql: process.env.NODE_ENV === 'development' ? true : false,
     }
   })
 )
-
-app.listen(4000, () => console.log('start'))
+const port =
+  process.env.NODE_ENV === 'development' ? Config.DEV_PORT : Config.PORT
+app.listen(4000, () => console.log(`listening on port ${port}`))

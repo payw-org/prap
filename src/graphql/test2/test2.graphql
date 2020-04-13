@@ -1,5 +1,4 @@
 type Query {
-  Test2s: [Test2!]!
   Test2(id: Int!): Test2
 }
 type Test2 {

@@ -1,14 +1,10 @@
 import { IResolvers } from 'graphql-tools'
+import { Test2, QueryTest2Args } from 'src/graphql/types'
+
 const resolverMap: IResolvers = {
   Query: {
-    Test2s: () => {
-      return [
-        { id: 1, name: 'aaa' },
-        { id: 2, name: 'bbb' },
-      ]
-    },
-    Test2: (_: void, args: any[]) => {
-      return { id: 2, name: 'aaaaaa' }
+    Test2: (_: void, args: QueryTest2Args) => {
+      return { id: 2, name: 'aaaaaa' } as Test2
     },
   },
 }
