@@ -19,7 +19,6 @@
     "@zerollup/ts-transform-paths": "^1.7.17",
     "cpx": "^1.5.0",
     "eslint": "^6.8.0",
-    "graphql-codegen": "^0.4.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
     "ts-node-dev": "^1.0.0-pre.44",
