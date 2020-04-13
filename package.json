@@ -32,7 +32,7 @@
     "graphql-codegen:watch": "graphql-codegen --watch",
     "start": "node --harmony build/main.js",
     "build": "npm run graphql-codegen && ttsc && npm run copy-graphql",
-    "copy-graphql": "cpx src/graphql/**/*.graphql build/graphql",
+    "copy-graphql": "cpx \"src/graphql/**/*.graphql\" build/graphql",
     "dev": "npm run graphql-codegen && npm-run-all --parallel dev-ts type-check:watch graphql-codegen:watch",
     "dev-ts": "tsnd --no-notify --respawn --transpile-only -r tsconfig-paths/register src/main.ts",
     "type-check:watch": "tsc --noEmit --watch"
