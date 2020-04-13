@@ -1,26 +1,25 @@
 import { importSchema } from 'graphql-import'
-import require_all from 'require-all'
-import { makeExecutableSchema } from 'graphql-tools'
+import { makeExecutableSchema, IResolvers } from 'graphql-tools'
 import { GraphQLSchema } from 'graphql'
+import requireAll from 'src/modules/requireAll'
 
 const typeDefs = importSchema('./**/*.graphql')
-const controllers = require_all({
-  dirname: 'src/graphql',
-  filter: function (fileName) {
-    const parts = fileName.split('.')
-    if (parts[parts.length - 2] !== 'resolvers') return
-    return fileName
-  },
-})
-const modules = []
-for (const folder in controllers) {
-  for (const module in controllers[folder]) {
-    modules.push(controllers[folder][module].default)
+const resolvers = requireAll<IResolvers>(
+  process.env.NODE_ENV === 'development'
+    ? 'src/graphql'
+    : require('app-root-path') + '/build/graphql',
+  (fileName: string) => {
+    const splitedFileName = fileName.split('.')
+    if (splitedFileName[splitedFileName.length - 2] === 'resolvers') {
+      return true
+    }
+    return false
   }
-}
+)
+
 const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
-  resolvers: modules,
+  resolvers,
 })
 
 export default schema
