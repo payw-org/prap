@@ -1,7 +1,7 @@
 import express from 'express'
 import graphqlHTTP from 'express-graphql'
-import schema from 'src/graphql'
-import Config from 'src/config'
+import schema from '@/graphql'
+import Config from '@/config'
 
 if (process.env.NODE_ENV === 'development') {
   console.log('development mode')

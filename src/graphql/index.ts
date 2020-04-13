@@ -1,7 +1,7 @@
 import { importSchema } from 'graphql-import'
 import { makeExecutableSchema, IResolvers } from 'graphql-tools'
 import { GraphQLSchema } from 'graphql'
-import requireAll from 'src/modules/requireAll'
+import requireAll from '@/modules/require-all'
 
 const typeDefs = importSchema('./**/*.graphql')
 const resolvers = requireAll<IResolvers>(

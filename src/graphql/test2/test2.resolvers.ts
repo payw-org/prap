@@ -1,5 +1,5 @@
 import { IResolvers } from 'graphql-tools'
-import { Test2, QueryTest2Args } from 'src/graphql/types'
+import { Test2, QueryTest2Args } from '@/graphql/types'
 
 const resolverMap: IResolvers = {
   Query: {
