@@ -20,4 +20,4 @@ app.use(
 )
 const port =
   process.env.NODE_ENV === 'development' ? Config.DEV_PORT : Config.PORT
-app.listen(4000, () => console.log(`listening on port ${port}`))
+app.listen(port, () => console.log(`listening on port ${port}`))
