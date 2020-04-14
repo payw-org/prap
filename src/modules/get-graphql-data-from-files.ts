@@ -7,17 +7,14 @@ import { mergeTypeDefs } from '@graphql-toolkit/schema-merging'
 export function requireAll<T>(dir: string): T[]
 export function requireAll<T>(
   dir: string,
-  filter: (fileName: string) => {}
+  filter: (fileName: string) => boolean
 ): T[]
 export function requireAll<T>(
   dir: string,
-  filter?: (fileName: string) => {}
-): T[] {
-  if (filter === null || filter === undefined) {
-    filter = () => {
-      return true
-    }
+  filter: (fileName: string) => boolean = () => {
+    return true
   }
+): T[] {
   const modules = []
   const files = fs.readdirSync(dir)
   for (const fileName of files) {
@@ -35,18 +32,15 @@ export function requireAll<T>(
 export function getGraphqlsFromFile(dir: string): DocumentNode
 export function getGraphqlsFromFile(
   dir: string,
-  filter: (fileName: string) => {}
+  filter: (fileName: string) => boolean
 ): DocumentNode
 export function getGraphqlsFromFile(
   dir: string,
-  filter?: (fileName: string) => {}
+  filter: (fileName: string) => boolean = () => {
+    return true
+  }
 ): DocumentNode {
   const results = requireAll<DocumentNode>(dir, (fileName: string) => {
-    if (filter === null || filter === undefined) {
-      filter = () => {
-        return true
-      }
-    }
     const splitedFileName = fileName.split('.')
     if (
       splitedFileName[splitedFileName.length - 1] === 'graphql' &&
@@ -62,20 +56,17 @@ export function getGraphqlsFromFile(
 export function getResolversFromFile(dir: string): IResolvers[]
 export function getResolversFromFile(
   dir: string,
-  filter: (fileName: string) => {}
+  filter: (fileName: string) => boolean
 ): IResolvers[]
 export function getResolversFromFile(
   dir: string,
-  filter?: (fileName: string) => {}
+  filter: (fileName: string) => boolean = () => {
+    return true
+  }
 ): IResolvers[] {
   const resolversBeforePreProcessing = requireAll<IResolvers>(
     dir,
     (fileName: string) => {
-      if (filter === null || filter === undefined) {
-        filter = () => {
-          return true
-        }
-      }
       const splitedFileName = fileName.split('.')
       if (
         splitedFileName[splitedFileName.length - 2] === 'resolvers' &&
