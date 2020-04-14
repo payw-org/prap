@@ -1,23 +1,39 @@
-import express from 'express'
-import graphqlHTTP from 'express-graphql'
+const { ApolloServer } = require('apollo-server')
 import schema from '@/graphql'
 import Config from '@/config'
+
+let playground = false
+let introspection = false
+let port = Config.PORT
 
 if (process.env.NODE_ENV === 'development') {
   console.log('development mode')
   process.env.NODE_ENV = 'development'
+  playground = true
+  introspection = true
+  port = Config.DEV_PORT
 }
 
-const app = express()
-app.use(
-  '/graphql',
-  graphqlHTTP(async (request) => {
+const server = new ApolloServer({
+  schema,
+  playground,
+  introspection,
+  context: ({ req }: any) => {
+    if (!req.headers.accesstoken) return { authority: undefined }
+    //check user with token
     return {
-      schema: schema,
-      graphiql: process.env.NODE_ENV === 'development' ? true : false,
+      authority: {
+        userId: 1,
+        isAdmin: 2,
+      },
     }
+  },
+})
+
+server
+  .listen({
+    port,
   })
-)
-const port =
-  process.env.NODE_ENV === 'development' ? Config.DEV_PORT : Config.PORT
-app.listen(port, () => console.log(`listening on port ${port}`))
+  .then(() => {
+    console.log(`🚀 Server ready at ${port}`)
+  })

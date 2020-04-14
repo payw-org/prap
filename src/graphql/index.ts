@@ -1,25 +1,42 @@
-import { importSchema } from 'graphql-import'
-import { makeExecutableSchema, IResolvers } from 'graphql-tools'
-import { GraphQLSchema } from 'graphql'
-import requireAll from '@/modules/require-all'
+import {
+  makeExecutableSchema,
+  addSchemaLevelResolveFunction,
+} from 'graphql-tools'
+import {
+  GraphQLSchema,
+  GraphQLResolveInfo,
+  GraphQLFieldResolver,
+} from 'graphql'
+import {
+  getGraphqlsFromFile,
+  getResolversFromFile,
+} from '@/modules/get-graphql-data-from-files'
 
-const typeDefs = importSchema('./**/*.graphql')
-const resolvers = requireAll<IResolvers>(
+const path =
   process.env.NODE_ENV === 'development'
     ? 'src/graphql'
-    : require('app-root-path') + '/build/graphql',
-  (fileName: string) => {
-    const splitedFileName = fileName.split('.')
-    if (splitedFileName[splitedFileName.length - 2] === 'resolvers') {
-      return true
-    }
-    return false
-  }
-)
+    : require('app-root-path') + '/build/graphql'
+
+const typeDefs = getGraphqlsFromFile(path)
+const resolvers = getResolversFromFile(path)
 
 const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
   resolvers,
 })
+
+const rootResolveFunction: GraphQLFieldResolver<undefined, object> = (
+  parent,
+  args,
+  context,
+  info: GraphQLResolveInfo
+) => {
+  // console.log(parent)
+  // console.log(args)
+  // console.log(context)
+  // console.log(info)
+}
+
+addSchemaLevelResolveFunction(schema, rootResolveFunction)
 
 export default schema

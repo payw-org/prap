@@ -1,11 +1,10 @@
-import { IResolvers } from 'graphql-tools'
-import { Test2, QueryTest2Args } from '@/graphql/types'
+import { Test2, QueryTest2Args, QueryResolvers } from '@/graphql/types'
 
-const resolverMap: IResolvers = {
+const resolverMap = {
   Query: {
-    Test2: (_: void, args: QueryTest2Args) => {
+    Test2: (root, args: QueryTest2Args) => {
       return { id: 2, name: 'aaaaaa' } as Test2
     },
-  },
+  } as QueryResolvers,
 }
 export default resolverMap

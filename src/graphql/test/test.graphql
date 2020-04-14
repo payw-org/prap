@@ -1,6 +1,9 @@
 type Query {
   Test: [Test!]!
 }
+type Mutation {
+  addTest(id: Int!, name: String!): Test!
+}
 type Test {
   id: Int!
   name: String!
