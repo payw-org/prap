@@ -10,7 +10,7 @@ import {
 import {
   getGraphqlsFromFile,
   getResolversFromFile,
-} from '@/modules/get-graphql-data-from-files'
+} from 'get-graphql-data-from-files'
 
 const path =
   process.env.NODE_ENV === 'development'
