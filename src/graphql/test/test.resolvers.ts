@@ -1,12 +1,26 @@
-import { IResolvers } from 'graphql-tools'
-const resolverMap: IResolvers = {
+import {
+  Test,
+  QueryResolvers,
+  MutationResolvers,
+  MutationAddTestArgs,
+} from '@/graphql/types'
+
+const data = [
+  { id: 3, name: 'test1' },
+  { id: 3, name: 'test1' },
+]
+
+const resolverMap = {
   Query: {
-    Test: () => {
-      return [
-        { id: 3, name: 'test1' },
-        { id: 4, name: 'test2' },
-      ]
+    Test: (root) => {
+      return data
     },
-  },
+  } as QueryResolvers,
+  Mutation: {
+    addTest: (root, args: MutationAddTestArgs) => {
+      data.push(args)
+      return args as Test
+    },
+  } as MutationResolvers,
 }
 export default resolverMap

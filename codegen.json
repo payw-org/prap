@@ -3,7 +3,7 @@
   "schema": ["src/graphql/**/*.graphql"],
   "generates": {
     "./src/graphql/types.d.ts": {
-      "plugins": ["typescript"]
+      "plugins": ["typescript", "typescript-resolvers"]
     }
   },
   "hooks": {

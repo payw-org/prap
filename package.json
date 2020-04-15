@@ -3,16 +3,15 @@
   "version": "0.0.0",
   "main": "src/main.ts",
   "dependencies": {
+    "apollo-server": "^2.12.0",
     "app-root-path": "^3.0.0",
-    "express": "^4.17.1",
-    "express-graphql": "^0.9.0",
-    "graphql-import": "^1.0.2",
+    "get-graphql-data-from-files": "^1.0.1",
     "graphql-tools": "^4.0.7"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.13.2",
     "@graphql-codegen/typescript": "^1.13.2",
-    "@types/express": "^4.17.6",
+    "@graphql-codegen/typescript-resolvers": "^1.13.2",
     "@types/graphql": "^14.5.0",
     "@types/prettier": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
