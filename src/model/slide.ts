@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 import composeWithMongoose from 'graphql-compose-mongoose'
 import { BaseObjectDTC } from './object'
 import { generateMutation, generateQuery } from '.'
+import { Project } from './project'
 
 export const type = 'Slide'
 const SlideSchema = new mongoose.Schema(
@@ -43,6 +44,7 @@ SlideTC.addResolver({
     return Slide.findOne({ _id: args._id }) // return the record
   },
 })
+
 const query = {
   ...generateQuery(type, SlideTC),
 }
@@ -51,5 +53,18 @@ const mutation = {
   ...generateMutation(type, SlideTC),
   addObject: SlideTC.getResolver('addObject'),
 }
+const createOneResolver = SlideTC.getResolver('createOne').addArgs({
+  proejctId: { type: 'MongoID!', required: true },
+})
+mutation[type.toLowerCase() + 'CreateOne'] = createOneResolver.wrapResolve(
+  (next) => async (rp) => {
+    const payload = await next(rp)
+    const slide = await Project.update(
+      { _id: rp.args.proejctId },
+      { $push: { slideIds: payload.record._id } }
+    )
+    return payload
+  }
+)
 
 export default { query, mutation }

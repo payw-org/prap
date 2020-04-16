@@ -14,7 +14,7 @@ const ProjectSchema = new mongoose.Schema(
   }
 )
 
-const Project = mongoose.model(type, ProjectSchema)
+export const Project = mongoose.model(type, ProjectSchema)
 
 export const ProjectTC = composeWithMongoose(Project)
 

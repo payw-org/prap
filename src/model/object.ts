@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import { requireAll } from 'get-graphql-data-from-files'
 import { composeWithMongooseDiscriminators } from 'graphql-compose-mongoose'
 import { generateMutation, generateQuery } from '@/model'
@@ -65,11 +65,24 @@ for (const objectModel of objectModels) {
     type: objectModel.type,
     objectTypeComposer: objectTC,
   })
-  const objectMutation = generateMutation(objectModel.type, objectTC)
+  const createOneResolver = objectTC.getResolver('createOne').addArgs({
+    slidId: { type: 'MongoID!', required: true },
+  })
+
   objectsMutation = {
     ...objectsMutation,
-    ...objectMutation,
+    ...generateMutation(objectModel.type, objectTC),
   }
+  objectsMutation[
+    objectModel.type.toLowerCase() + 'CreateOne'
+  ] = createOneResolver.wrapResolve((next) => async (rp) => {
+    const payload = await next(rp)
+    const slide = await Slide.update(
+      { _id: rp.args.slidId },
+      { $push: { objectIds: payload.record._id } }
+    )
+    return payload
+  })
 }
 
 const query = {
