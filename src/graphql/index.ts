@@ -19,7 +19,6 @@ const path =
 
 const typeDefs = getGraphqlsFromFile(path)
 const resolvers = getResolversFromFile(path)
-
 const schema: GraphQLSchema = makeExecutableSchema({
   typeDefs,
   resolvers,
