@@ -66,5 +66,18 @@ mutation[type.toLowerCase() + 'CreateOne'] = createOneResolver.wrapResolve(
     return payload
   }
 )
-
+const createManyResolver = SlideTC.getResolver('createMany').addArgs({
+  proejctId: { type: 'MongoID!', required: true },
+})
+mutation[type.toLowerCase() + 'CreateMany'] = createManyResolver.wrapResolve(
+  (next) => async (rp) => {
+    const payload = await next(rp)
+    console.log(payload.recordIds)
+    const slide = await Project.update(
+      { _id: rp.args.proejctId },
+      { $push: { slideIds: { $each: payload.recordIds } } }
+    )
+    return payload
+  }
+)
 export default { query, mutation }

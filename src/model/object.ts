@@ -65,14 +65,14 @@ for (const objectModel of objectModels) {
     type: objectModel.type,
     objectTypeComposer: objectTC,
   })
-  const createOneResolver = objectTC.getResolver('createOne').addArgs({
-    slidId: { type: 'MongoID!', required: true },
-  })
 
   objectsMutation = {
     ...objectsMutation,
     ...generateMutation(objectModel.type, objectTC),
   }
+  const createOneResolver = objectTC.getResolver('createOne').addArgs({
+    slidId: { type: 'MongoID!', required: true },
+  })
   objectsMutation[
     objectModel.type.toLowerCase() + 'CreateOne'
   ] = createOneResolver.wrapResolve((next) => async (rp) => {
@@ -80,6 +80,19 @@ for (const objectModel of objectModels) {
     const slide = await Slide.update(
       { _id: rp.args.slidId },
       { $push: { objectIds: payload.record._id } }
+    )
+    return payload
+  })
+  const createManyResolver = objectTC.getResolver('createMany').addArgs({
+    slidId: { type: 'MongoID!', required: true },
+  })
+  objectsMutation[
+    objectModel.type.toLowerCase() + 'CreateMany'
+  ] = createManyResolver.wrapResolve((next) => async (rp) => {
+    const payload = await next(rp)
+    const slide = await Slide.update(
+      { _id: rp.args.slidId },
+      { $push: { objectIds: { $each: payload.recordIds } } }
     )
     return payload
   })
