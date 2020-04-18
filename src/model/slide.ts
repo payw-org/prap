@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import composeWithMongoose from 'graphql-compose-mongoose'
-import { BaseObjectDTC } from './object'
+import { BaseObjectDTC, BaseObjectModel } from './object'
 import { generateMutation, generateQuery } from '.'
 import { Project } from './project'
 
@@ -59,7 +59,7 @@ const createOneResolver = SlideTC.getResolver('createOne').addArgs({
 mutation[type.toLowerCase() + 'CreateOne'] = createOneResolver.wrapResolve(
   (next) => async (rp) => {
     const payload = await next(rp)
-    const slide = await Project.update(
+    const project = await Project.update(
       { _id: rp.args.proejctId },
       { $push: { slideIds: payload.record._id } }
     )
@@ -72,12 +72,59 @@ const createManyResolver = SlideTC.getResolver('createMany').addArgs({
 mutation[type.toLowerCase() + 'CreateMany'] = createManyResolver.wrapResolve(
   (next) => async (rp) => {
     const payload = await next(rp)
-    console.log(payload.recordIds)
-    const slide = await Project.update(
+    const project = await Project.update(
       { _id: rp.args.proejctId },
       { $push: { slideIds: { $each: payload.recordIds } } }
     )
     return payload
   }
+)
+const removeByIdResolver = SlideTC.getResolver('removeById').addArgs({
+  proejctId: { type: 'MongoID!', required: true },
+})
+mutation[type.toLowerCase() + 'RemoveById'] = removeByIdResolver.wrapResolve(
+  (next) => async (rp) => {
+    const payload = await next(rp)
+    const resultOfRemoveObject = await BaseObjectModel.remove({
+      _id: { $in: payload.record.objectIds },
+    })
+    const resultOfUpdateProject = await Project.update(
+      { _id: rp.args.proejctId },
+      { $pull: { slideIds: payload.record._id } }
+    )
+    return payload
+  }
+)
+const removeByIdsResolver = SlideTC.getResolver('removeMany')
+  .removeArg('filter')
+  .addArgs({
+    proejctId: { type: 'MongoID!', required: true },
+    _ids: { type: '[MongoID!]', required: true },
+  })
+
+mutation[type.toLowerCase() + 'RemoveByIds'] = removeByIdsResolver.wrapResolve(
+  (next) => async (rp) => {
+    const resultOfFindSlides = await Slide.find({
+      '_id': {
+        $in: rp.args._ids,
+      },
+    })
+    const mergedObjectIds = []
+    for (const result of resultOfFindSlides) {
+      mergedObjectIds.push(...(result as any).objectIds)
+    }
+    const resultOfRemoveSlide = await Slide.remove({
+      _id: { $in: rp.args._ids },
+    })
+    const resultOfRemoveObject = await BaseObjectModel.remove({
+      _id: { $in: mergedObjectIds },
+    })
+    const resultOfUpdateProject = await Project.update(
+      { _id: rp.args.proejctId },
+      { $pull: { slideIds: { $in: rp.args._ids } } }
+    )
+    return { numAffected: rp.args._ids.length }
+  },
+  'removeByIds'
 )
 export default { query, mutation }
