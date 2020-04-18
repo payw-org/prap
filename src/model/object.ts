@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 import { requireAll } from 'get-graphql-data-from-files'
 import { composeWithMongooseDiscriminators } from 'graphql-compose-mongoose'
 import { generateMutation, generateQuery } from '@/model'
-import { ObjectTypeComposer } from 'graphql-compose'
+import { ObjectTypeComposer, schemaComposer } from 'graphql-compose'
 import { Slide } from './slide'
 
 const enumObjectType: string[] = []
@@ -23,7 +23,6 @@ const BaseObjectSchema = new mongoose.Schema(
       type: String,
       require: true,
       enum: enumObjectType,
-      description: 'Character type Droid or Person',
     },
   },
   {
@@ -32,7 +31,8 @@ const BaseObjectSchema = new mongoose.Schema(
 )
 
 BaseObjectSchema.set('discriminatorKey', 'type')
-const BaseObjectModel = mongoose.model(type, BaseObjectSchema)
+
+export const BaseObjectModel = mongoose.model('Object', BaseObjectSchema)
 
 const objectModels: {
   type: string
@@ -96,8 +96,76 @@ for (const objectModel of objectModels) {
     )
     return payload
   })
+
+  const removeOneResolver = objectTC.getResolver('removeOne').addArgs({
+    slidId: { type: 'MongoID!', required: true },
+  })
+  objectsMutation[
+    objectModel.type.toLowerCase() + 'RemoveOne'
+  ] = removeOneResolver.wrapResolve((next) => async (rp) => {
+    const payload = await next(rp)
+    const slide = await Slide.update(
+      { _id: rp.args.slidId },
+      { $pull: { objectIds: payload.record._id } }
+    )
+    return payload
+  })
 }
 
+const removeByIdResolver = BaseObjectDTC.getResolver('removeById').addArgs({
+  slidId: { type: 'MongoID!', required: true },
+})
+objectsMutation[
+  type.toLowerCase() + 'RemoveById'
+] = removeByIdResolver.wrapResolve((next) => async (rp) => {
+  const payload = await next(rp)
+  const slide = await Slide.update(
+    { _id: rp.args.slidId },
+    { $pull: { objectIds: payload.recordId } }
+  )
+  return payload
+})
+const removeByIdsResolver = BaseObjectDTC.getResolver('removeMany')
+  .removeArg('filter')
+  .addArgs({
+    slidId: { type: 'MongoID!', required: true },
+    _ids: { type: '[MongoID!]', required: true },
+  })
+  .setType(
+    schemaComposer.createObjectTC({
+      name: 'RemoveByIdsObjectPayload',
+      fields: {
+        objectIds: '[MongoID]',
+        objects: [BaseObjectDTC],
+      },
+    })
+  )
+
+objectsMutation[
+  type.toLowerCase() + 'RemoveByIds'
+] = removeByIdsResolver.wrapResolve(
+  (next) => async (rp) => {
+    const resultOfFindObjects = await BaseObjectModel.find({
+      '_id': {
+        $in: rp.args._ids,
+      },
+    })
+    const resultOfRemoveObjects = await BaseObjectModel.remove({
+      '_id': {
+        $in: rp.args._ids,
+      },
+    })
+    const slide = await Slide.update(
+      { _id: rp.args.slidId },
+      { $pull: { objectIds: { $in: rp.args._ids } } }
+    )
+    return {
+      objectIds: rp.args._ids,
+      objects: resultOfFindObjects,
+    }
+  },
+  'removeByIds'
+)
 const query = {
   ...generateQuery(type, BaseObjectDTC),
 }

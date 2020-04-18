@@ -3,6 +3,7 @@ import composeWithMongoose from 'graphql-compose-mongoose'
 import { BaseObjectDTC, BaseObjectModel } from './object'
 import { generateMutation, generateQuery } from '.'
 import { Project } from './project'
+import { schemaComposer } from 'graphql-compose'
 
 export const type = 'Slide'
 const SlideSchema = new mongoose.Schema(
@@ -101,6 +102,17 @@ const removeByIdsResolver = SlideTC.getResolver('removeMany')
     proejctId: { type: 'MongoID!', required: true },
     _ids: { type: '[MongoID!]', required: true },
   })
+  .setType(
+    schemaComposer.createObjectTC({
+      name: 'RemoveByIdsSlidePayload',
+      fields: {
+        objectIds: '[MongoID]',
+        slideIds: '[MongoID]',
+        objects: [BaseObjectDTC],
+        slides: [SlideTC],
+      },
+    })
+  )
 
 mutation[type.toLowerCase() + 'RemoveByIds'] = removeByIdsResolver.wrapResolve(
   (next) => async (rp) => {
@@ -113,6 +125,11 @@ mutation[type.toLowerCase() + 'RemoveByIds'] = removeByIdsResolver.wrapResolve(
     for (const result of resultOfFindSlides) {
       mergedObjectIds.push(...(result as any).objectIds)
     }
+    const resultOfFindObjects = await BaseObjectModel.find({
+      '_id': {
+        $in: mergedObjectIds,
+      },
+    })
     const resultOfRemoveSlide = await Slide.remove({
       _id: { $in: rp.args._ids },
     })
@@ -123,7 +140,12 @@ mutation[type.toLowerCase() + 'RemoveByIds'] = removeByIdsResolver.wrapResolve(
       { _id: rp.args.proejctId },
       { $pull: { slideIds: { $in: rp.args._ids } } }
     )
-    return { numAffected: rp.args._ids.length }
+    return {
+      objectIds: mergedObjectIds,
+      slideIds: rp.args._ids,
+      objects: resultOfFindObjects,
+      slides: resultOfFindSlides,
+    }
   },
   'removeByIds'
 )
