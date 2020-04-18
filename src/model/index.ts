@@ -27,17 +27,11 @@ export function generateMutation(type: string, tc: ObjectTypeComposer): any {
 }
 
 import projectDatas from './project'
-import slideDatas from './slide'
-import objectDatas from './object'
 schemaComposer.Query.addFields({
   ...projectDatas.query,
-  ...slideDatas.query,
-  ...objectDatas.query,
 })
 
 schemaComposer.Mutation.addFields({
   ...projectDatas.mutation,
-  ...slideDatas.mutation,
-  ...objectDatas.mutation,
 })
 export default schemaComposer.buildSchema()
