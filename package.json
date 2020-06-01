@@ -43,7 +43,7 @@
     "type-check:watch": "tsc --noEmit --watch",
     "test": "tsnd -r tsconfig-paths/register src/model/index.ts "
   },
-  "repository": "https://github.com/paywteam/prap",
+  "repository": "https://github.com/payw-org/prap",
   "author": "PAYW",
   "license": "MIT",
   "bugs": {
